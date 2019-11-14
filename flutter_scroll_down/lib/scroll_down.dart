@@ -7,7 +7,7 @@ class ScrollDown<T> extends StatefulWidget {
 
   final OnScrollEndFunction onScrollEnd;
   final List<T> data;
-  final ScrollDownBuilder itemBuilder;
+  final ScrollDownBuilder<T> itemBuilder;
   final bool isWaiting;
   final Widget loader;
 
