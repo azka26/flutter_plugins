@@ -46,7 +46,7 @@ packages:
     description:
       path: flutter_scroll_down
       ref: HEAD
-      resolved-ref: f4aa76f954d608f2bcae167f65c52d898b452055
+      resolved-ref: "8a232bb84348b2a41692e27c6c66c27a5d2eb727"
       url: "https://github.com/azka26/flutter_plugins.git"
     source: git
     version: "1.0.0+1"
