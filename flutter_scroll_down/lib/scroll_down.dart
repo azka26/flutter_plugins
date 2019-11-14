@@ -1,43 +1,62 @@
 import 'package:flutter/material.dart';
 
-class ScrollDown extends StatefulWidget {
+typedef OnScrollEndFunction = void Function();
+typedef ScrollDownBuilder<T> = Widget Function(BuildContext context, T item);
+class ScrollDown<T> extends StatefulWidget {
+  ScrollDown({ Key key, this.onScrollEnd, this.itemBuilder, this.data, this.isWaiting, this.loader }) : super(key: key);
+
+  final OnScrollEndFunction onScrollEnd;
+  final List<T> data;
+  final ScrollDownBuilder itemBuilder;
+  final bool isWaiting;
+  final Widget loader;
+
   @override
-  _ScrollDownState createState() => _ScrollDownState();
+  State<ScrollDown<T>> createState() => _ScrollDownState<T>();
 }
 
-class _ScrollDownState extends State<ScrollDown> {
+class _ScrollDownState<T> extends State<ScrollDown<T>> {
   ScrollController _controller;
-  
-  void _scrollListener() {
-    if (_controller.offset == _controller.position.maxScrollExtent && !_controller.position.outOfRange) {
-        // RELOAD DATA
-      print("OFFSET : " + _controller.offset.toString());
-      print("Max Posisition : " + _controller.position.maxScrollExtent.toString());
-      print("Is Out Of Range : " + _controller.position.outOfRange.toString());
-    }
-      // print("OFFSET : " + _controller.offset.toString());
-      // print("Max Posisition : " + _controller.position.maxScrollExtent.toString());
-      // print("Is Out Of Range : " + _controller.position.outOfRange.toString());
-  }
-
   @override
   void initState() {
     super.initState();
     _controller = new ScrollController();
-    _controller.addListener(_scrollListener);
+    _controller.addListener(this._scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_controller.offset >= _controller.position.maxScrollExtent) {
+      this.widget.onScrollEnd();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<T> data = widget.data;
+    bool isWaiting = widget.isWaiting;
+    int dataLength = data.length;
+    if (isWaiting) {
+      dataLength = dataLength + 1;
+    }
+
     return ListView.builder(
       controller: _controller,
-      itemCount: 20,
-      itemBuilder: (listContext, index) {
-        return Container(
-          height: 40,
-          child: Text("Child Index : " + index.toString())
-        );
-      },
+      itemCount: dataLength,
+      itemBuilder: (itemBuilderContext, index) {
+        if (isWaiting && (dataLength - 1) == index) {
+          if (this.widget.loader != null) return this.widget.loader;
+          
+          return Container(
+            padding: EdgeInsets.only(
+              top: 5,
+              bottom: 10
+            ),
+            child: Center(child: CircularProgressIndicator(),) ,
+          );
+        }
+
+        return this.widget.itemBuilder(itemBuilderContext, data[index]);
+      }
     );
   }
 }
