@@ -17,7 +17,6 @@ class _ScrollExampleState extends State<ScrollExample> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadData();
   }
