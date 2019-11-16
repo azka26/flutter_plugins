@@ -27,6 +27,7 @@ dependencies:
     git:
       url: https://github.com/azka26/flutter_plugins.git
       path: flutter_scroll_down
+  flutter_form_builder: ^3.6.1
 
 dev_dependencies:
   flutter_test:

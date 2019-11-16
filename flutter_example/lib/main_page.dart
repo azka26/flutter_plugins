@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example/components/form_builder_example.dart';
 import 'package:flutter_example/components/future_builder_example.dart';
 import 'package:flutter_example/components/scroll_example.dart';
 import 'package:flutter_example/components/stream_builder_example.dart';
@@ -48,7 +49,8 @@ class _MainPageState extends State<MainPage> {
           // )
           _linkToSample(context, "Scroll Example", (context) => ScrollExample()),
           _linkToSample(context, "Stream Builder", (context) => StreamBuilderExample()),
-          _linkToSample(context, "Future Builder", (context) => FutureBuilderExample())
+          _linkToSample(context, "Future Builder", (context) => FutureBuilderExample()),
+          _linkToSample(context, "Form Builder", (context) => FormBuilderExample())
         ],
       ),
     );
