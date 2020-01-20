@@ -54,7 +54,6 @@ class FormBuilderTextFieldState extends State<FormBuilderTextField> {
   
   @override
   void initState() {
-    // TODO: implement initState
     _formState = AzkaFormBuilder.of(context);
     if (_formState != null) {
       _formState.addField(widget.id, _formFieldState);
@@ -65,7 +64,6 @@ class FormBuilderTextFieldState extends State<FormBuilderTextField> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     if (_formState != null) 
     {
       _formState.removeField(widget.id);

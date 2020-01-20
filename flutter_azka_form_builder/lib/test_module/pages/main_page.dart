@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_azka_form_builder/src/azka_form_builder.dart';
+import 'package:flutter_azka_form_builder/src/form_control/form_builder_checkbox.dart';
 import 'package:flutter_azka_form_builder/src/form_control/form_builder_text_field.dart';
 import 'package:flutter_azka_form_builder/src/form_control/form_validator/form_input_validator.dart';
 import 'package:flutter_azka_form_builder/test_module/models/child.dart';
@@ -19,6 +20,7 @@ class _MainPageState extends State<MainPage> {
     parent = Parent.create({
       "id": "",
       "name": "",
+      "isActive": false,
       "children": [
         {"id": "", "name": ""}
       ]
@@ -113,6 +115,11 @@ class _MainPageState extends State<MainPage> {
                   onChanged: (val) => parent.id = val,
                   obscureText: true,
                   maxLength: 16,
+                ),
+                FormBuilderCheckbox(
+                  id: "isActive",
+                  value: parent.isActive,
+                  onChanged: (val) => parent.isActive = val,
                 ),
                 FormBuilderTextField(
                   id: "name",
