@@ -6,11 +6,38 @@ A new Flutter project.
 
 This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+# Flutter Azka Form Builder - flutter_azka_form_builder
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Help in creation Form
+
+## Simple Usage
+-
+
+### Example
+```dart
+final GlobalKey<AzkaFormBuilderState> _formBuilderState = GlobalKey<AzkaFormBuilderState>();
+```
+
+```dart
+Column(
+  children: <Widget>[]
+)
+```
+
+## Input widgets
+The currently supported fields include:
+* `FormBuilderCheckbox` - Single Checkbox field
+* `FormBuilderRadioOption` - List of Checkboxes for multiple selection
+* `FormBuilderTextField` - For text input. Accepts input of single-line text, multi-line text, password,
+email, urls etc by using different configurations and validators
+
+## Validation
+-
+
+### Built-in Validators
+-
+
+## TODO: 
+### Improvements
+-
