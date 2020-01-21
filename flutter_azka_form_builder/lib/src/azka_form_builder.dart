@@ -54,9 +54,12 @@ class AzkaFormBuilderState extends State<AzkaFormBuilder> {
   }
 
   void _setValue(Map<String, dynamic> map, String key, dynamic value) {
-    if (value is FormBuilderRadioOption) {
-      map.putIfAbsent(key, () => value.value);
-    } else {
+    if (value is FormBuilderRadioOption) 
+    {
+      map.putIfAbsent(key, () => value.toFormValue());
+    } 
+    else 
+    {
       map.putIfAbsent(key, () => value);
     }
   }

@@ -16,4 +16,12 @@ class FormBuilderRadioOption {
     this.label = label;
     this.value = value;
   }
+
+  Map<String, dynamic> toFormValue() {
+    Map<String, dynamic> map = {
+      "value": this.id,
+      "label": this.label
+    };
+    return map;
+  }
 }

@@ -108,8 +108,6 @@ class _MainPageState extends State<MainPage> {
       list.add({"id": parent.children[i].id, "name": parent.children[i].name});
     }
 
-    
-    
     return Scaffold(
       appBar: AppBar(
         title: Text("App Bar"),
