@@ -66,6 +66,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ],
               ),
+              Text((parent.children[i].id?? "") + "::" + (parent.children[i].name?? "")),
               new FormBuilderTextField(
                 id: "details[${i.toString()}].id",
                 decoration: InputDecoration(labelText: "Detail Id [${i.toString()}]"),
@@ -73,13 +74,13 @@ class _MainPageState extends State<MainPage> {
                   FormInputValidator.required(errorText: "Detail Id ${i.toString()} is required.")
                 ],
                 value: parent.children[i].id,
-                onChanged: (val) => parent.children[i].id = val,
+                onChanged: (val) => this.setState(() { parent.children[i].id = val; }),
               ),
               new FormBuilderTextField(
                 id: "details[${i.toString()}].name",
                 decoration: InputDecoration(labelText: "Detail Name [${i.toString()}]"),
                 value: parent.children[i].name,
-                onChanged: (val) => parent.children[i].name = val,
+                onChanged: (val) => this.setState(() { parent.children[i].name = val; }),
               ),
             ],
           ),
@@ -108,24 +109,26 @@ class _MainPageState extends State<MainPage> {
             key: _formState,
             child: Column(
               children: <Widget>[
+                Text((parent.name?? "") + " " + (parent.isActive ? "TRUE" : "FALSE")),
                 FormBuilderTextField(
                   id: "id",
                   decoration: InputDecoration(labelText: "Id Property"),
                   value: parent.id,
-                  onChanged: (val) => parent.id = val,
+                  onChanged: (val) => this.setState(() { parent.id = val; }),
                   obscureText: true,
                   maxLength: 16,
                 ),
                 FormBuilderCheckbox(
                   id: "isActive",
+                  label: Text("Is Active"),
                   value: parent.isActive,
-                  onChanged: (val) => parent.isActive = val,
+                  onChanged: (val) => this.setState(() {parent.isActive = val;}) ,
                 ),
                 FormBuilderTextField(
                   id: "name",
                   decoration: InputDecoration(labelText: "Name Property"),
                   value: parent.name,
-                  onChanged: (val) => parent.name = val,
+                  onChanged: (val) => this.setState(() { parent.name = val; }) ,
                   maxLength: 10,
                 ),
                 // CHILD

@@ -6,13 +6,19 @@ class FormBuilderCheckbox extends StatefulWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
   final InputDecoration decoration;
+  final bool readOnly;
+  final Widget label;
+  final List<FormFieldValidator<String>> validators;
 
   FormBuilderCheckbox({
     Key key
     , @required this.id
+    , @required this.label
     , this.value = false
     , this.onChanged
-    , this.decoration
+    , this.decoration = const InputDecoration()
+    , this.readOnly = false
+    , this.validators
   }) : super(key: key);
 
   @override
@@ -42,21 +48,65 @@ class _FormBuilderCheckboxState extends State<FormBuilderCheckbox> {
     super.dispose();
   }
 
+  void onChange(BuildContext context, FormFieldState<bool> field) {
+    bool newValue = !(field.value ?? false);
+    field.didChange(newValue);
+    if (widget.onChanged != null) {
+      widget.onChanged(newValue);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FormField(
       key: _formFieldState,
       initialValue: widget.value,
+      validator: (val) {
+        if (widget.validators == null || widget.validators.length == 0) return null;
+        for (int i = 0; i < widget.validators.length; i++) {
+          String result = widget.validators[i](val);
+          if (result != null) {
+            return result;
+          }
+        }
+        return null;
+      },
       builder: (FormFieldState<bool> field) {
-        return GestureDetector(
-          child: Container(
-            child: Text(field.value ? "TRUE" : "FALSE"),
+        return InputDecorator(
+          decoration: widget.decoration.copyWith(
+            enabled: !widget.readOnly,
+            errorText: field.errorText
           ),
-          onTap: () {
-            bool newValue = !(field.value ?? false);
-            field.didChange(newValue);
-          },
+          child: ListTile(
+            dense: true,
+            isThreeLine: false,
+            contentPadding: EdgeInsets.all(0.0),
+            title: widget.label,
+            trailing: Checkbox(
+              value: field.value,
+              onChanged: widget.readOnly ? null : (value) {
+                FocusScope.of(context).requestFocus(FocusNode());
+                field.didChange(value);
+                if (widget.onChanged != null) widget.onChanged(value);
+              },
+            ),
+            onTap: widget.readOnly ? null : () {
+              FocusScope.of(context).requestFocus(FocusNode());
+              bool newValue = !(field.value ?? false);
+              field.didChange(newValue);
+              if (widget.onChanged != null) widget.onChanged(newValue);
+            },
+          ),
         );
+        // GestureDetector(
+        //   child: Container(
+        //     child: Text(field.value ? "TRUE" : "FALSE"),
+        //   ),
+        //   onTap: () {
+        //     bool newValue = !(field.value ?? false);
+        //     field.didChange(newValue);
+        //   },
+        // );
       },      
     );
   }
