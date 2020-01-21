@@ -1,9 +1,18 @@
 import 'package:flutter_azka_form_builder/test_module/models/child.dart';
+import 'package:flutter_azka_form_builder/test_module/models/child_option.dart';
 
 class Parent {
   String _id;
   String _name;
   bool _isActive;
+  ChildOption _selectedOption1;
+  ChildOption _selectedOption2;
+
+  ChildOption get selectedOption1 => this._selectedOption1;
+  ChildOption get selectedOption2 => this._selectedOption2;
+  set selectedOption1(ChildOption val) => this._selectedOption1 = val;
+  set selectedOption2(ChildOption val) => this._selectedOption2 = val;
+
   List<Child> _children;
 
   String get id => this._id;

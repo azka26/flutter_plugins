@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_azka_form_builder/src/azka_form_builder.dart';
 import 'package:flutter_azka_form_builder/src/form_control/form_builder_checkbox.dart';
+import 'package:flutter_azka_form_builder/src/form_control/form_builder_radio.dart';
+import 'package:flutter_azka_form_builder/src/form_control/form_builder_radio_option.dart';
 import 'package:flutter_azka_form_builder/src/form_control/form_builder_text_field.dart';
 import 'package:flutter_azka_form_builder/src/form_control/form_validator/form_input_validator.dart';
 import 'package:flutter_azka_form_builder/test_module/models/child.dart';
+import 'package:flutter_azka_form_builder/test_module/models/child_option.dart';
 import 'package:flutter_azka_form_builder/test_module/models/parent.dart';
 
 class MainPage extends StatefulWidget {
@@ -26,6 +29,7 @@ class _MainPageState extends State<MainPage> {
       ]
     });
 
+    parent.selectedOption1 = new ChildOption.create({"id": "child_1"});
     super.initState();
   }
 
@@ -93,10 +97,18 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<ChildOption> listChildOptions = [
+      ChildOption.create({"id": "child_1", "name": "Child 1"}),
+      ChildOption.create({"id": "child_2", "name": "Child 2"}),
+      ChildOption.create({"id": "child_3", "name": "Child 3"})
+    ];
+
     List<Map<String, dynamic>> list = new List<Map<String, dynamic>>();
     for (int i = 0; i < parent.children.length; i++) {
       list.add({"id": parent.children[i].id, "name": parent.children[i].name});
     }
+
+    
     
     return Scaffold(
       appBar: AppBar(
@@ -130,6 +142,18 @@ class _MainPageState extends State<MainPage> {
                   value: parent.name,
                   onChanged: (val) => this.setState(() { parent.name = val; }) ,
                   maxLength: 10,
+                ),
+                FormBuilderRadio(
+                  id: "myRadio",
+                  selectedValue: FormBuilderRadioOption.create(parent.selectedOption1?.id, parent.selectedOption1?.name, parent.selectedOption1),
+                  options: listChildOptions.map((val) => FormBuilderRadioOption.create(val.id, val.name, val)).toList(),
+                  onChanged: (val) => this.setState(() { parent.selectedOption1 = val.value; })
+                ),
+                FormBuilderRadio(
+                  id: "myRadio2",
+                  selectedValue: FormBuilderRadioOption.create(parent.selectedOption2?.id, parent.selectedOption2?.name, parent.selectedOption2),
+                  options: listChildOptions.map((val) => FormBuilderRadioOption.create(val.id, val.name, val)).toList(),
+                  onChanged: (val) => this.setState(() { parent.selectedOption2 = val.value; })
                 ),
                 // CHILD
                 ..._buildDetails(context)

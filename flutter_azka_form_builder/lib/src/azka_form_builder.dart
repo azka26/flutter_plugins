@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_azka_form_builder/src/form_control/form_builder_radio_option.dart';
 import 'dart:async';
+
+import 'form_control/form_builder_radio.dart';
 
 typedef OnChanged = void Function();
 typedef OnWillPop = Future<bool> Function();
@@ -9,15 +12,13 @@ class AzkaFormBuilder extends StatefulWidget {
   final bool autovalidate;
   final OnChanged onChanged;
   final OnWillPop onWillPop;
-  // final Map<String, dynamic> initialValue;
-
+  
   AzkaFormBuilder({
     Key key
     , this.child
     , this.autovalidate = false
     , this.onChanged
     , this.onWillPop
-    // , this.initialValue 
   }) : super(key: key);
 
   static AzkaFormBuilderState of(BuildContext context) => context.findAncestorStateOfType<AzkaFormBuilderState>();
@@ -46,60 +47,18 @@ class AzkaFormBuilderState extends State<AzkaFormBuilder> {
   Map<String, dynamic> _value = new Map<String, dynamic>();
   Map<String, dynamic> get value => this._value;
 
-  // dynamic getInitialValue(String id) {
-  //   if (widget.initialValue == null) return null;
-  //   if (id.contains(".")) {
-  //     // SUB OBJECT
-  //     List<String> split = id.split(".");
-  //     return _getInitialSubValue(split, 0, widget.initialValue);
-  //   }
-  //   return widget.initialValue[id];
-  // }
-
-  // dynamic _getInitialSubValue(List<String> list, int depth, Map<String, dynamic> parent) {
-  //   if (depth >= list.length) return null;
-  //   if (parent == null) return null;
-
-  //   String property = list[depth];
-  //   if (property.contains("[") && property.contains("]")) {
-  //     // LIST
-  //     List<String> listProperty = property.split("[");
-  //     String propertyName = listProperty[0];
-  //     int index = int.parse(listProperty[1].replaceAll("]", ""));
-
-  //     if (!parent.containsKey(propertyName)) {
-  //       return null;
-  //     }
-
-  //     if (!(parent[propertyName] is List)) {
-  //       return null;
-  //     }
-
-  //     List<Map<String, dynamic>> listMap = parent[propertyName] as List<Map<String, dynamic>>;
-  //     if (listMap == null) return null;
-  //     if (index >= list.length) return null;
-  //     return _getInitialSubValue(list, depth + 1, listMap[index]);
-  //   }
-  //   else 
-  //   {
-  //     // OBJECT 
-  //     if (!parent.containsKey(property)) {
-  //       return null;
-  //     }
-
-  //     if (parent[property] is Map<String, dynamic>) {
-  //       return _getInitialSubValue(list, depth + 1, parent[property]);
-  //     }
-
-  //     return parent[property];
-  //   }
-  //   return null;
-  // }
-
   void save() 
   {
     this._formState.currentState.save();
     this._saveValue();
+  }
+
+  void _setValue(Map<String, dynamic> map, String key, dynamic value) {
+    if (value is FormBuilderRadioOption) {
+      map.putIfAbsent(key, () => value.value);
+    } else {
+      map.putIfAbsent(key, () => value);
+    }
   }
 
   void _saveValue() {
@@ -113,7 +72,7 @@ class AzkaFormBuilderState extends State<AzkaFormBuilder> {
         } 
         else 
         {
-          _value.putIfAbsent(key, () => value.currentState.value);
+          _setValue(_value, key, value.currentState.value);
         }
       });
     }
@@ -141,7 +100,7 @@ class AzkaFormBuilderState extends State<AzkaFormBuilder> {
     else 
     {
       if ((list.length - 1) == depth) {
-        parent.putIfAbsent(key, () => valueToAssign);
+        _setValue(parent, key, valueToAssign);
       }
       else 
       {
