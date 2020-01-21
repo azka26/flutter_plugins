@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_azka_form_builder/src/azka_form_builder.dart';
 import 'package:flutter_azka_form_builder/src/form_control/form_builder_checkbox.dart';
+import 'package:flutter_azka_form_builder/src/form_control/form_builder_date_time_picker.dart';
+import 'package:flutter_azka_form_builder/src/form_control/form_builder_dropdown.dart';
 import 'package:flutter_azka_form_builder/src/form_control/form_builder_radio.dart';
-import 'package:flutter_azka_form_builder/src/form_control/form_builder_radio_option.dart';
+import 'package:flutter_azka_form_builder/src/form_control/form_builder_option.dart';
 import 'package:flutter_azka_form_builder/src/form_control/form_builder_text_field.dart';
-import 'package:flutter_azka_form_builder/src/form_control/form_validator/form_input_validator.dart';
+import 'package:flutter_azka_form_builder/src/form_validator/form_input_validator.dart';
 import 'package:flutter_azka_form_builder/test_module/models/child.dart';
 import 'package:flutter_azka_form_builder/test_module/models/child_option.dart';
 import 'package:flutter_azka_form_builder/test_module/models/parent.dart';
@@ -28,6 +30,8 @@ class _MainPageState extends State<MainPage> {
         {"id": "", "name": ""}
       ]
     });
+
+    parent.dateValue = DateTime.now().add(Duration(days: 10));
 
     parent.selectedOption1 = new ChildOption.create({"id": "child_1"});
     super.initState();
@@ -95,6 +99,8 @@ class _MainPageState extends State<MainPage> {
     return list;
   }
 
+  String jsonValue = "";
+
   @override
   Widget build(BuildContext context) {
     List<ChildOption> listChildOptions = [
@@ -119,7 +125,16 @@ class _MainPageState extends State<MainPage> {
             key: _formState,
             child: Column(
               children: <Widget>[
-                Text((parent.name?? "") + " " + (parent.isActive ? "TRUE" : "FALSE")),
+                Text(jsonValue),
+                FormBuilderDateTimePicker(
+                  id: "my_date",
+                  decoration: InputDecoration(
+                    labelText: "TEST"
+                  ),
+                  inputType: InputType.datetime,
+                  value: parent.dateValue,
+                  onChanged: (val) => this.setState(() => parent.dateValue = val),
+                ),
                 FormBuilderTextField(
                   id: "id",
                   decoration: InputDecoration(labelText: "Id Property"),
@@ -143,16 +158,29 @@ class _MainPageState extends State<MainPage> {
                 ),
                 FormBuilderRadio(
                   id: "myRadio",
-                  selectedValue: FormBuilderRadioOption.create(parent.selectedOption1?.id, parent.selectedOption1?.name, parent.selectedOption1),
-                  options: listChildOptions.map((val) => FormBuilderRadioOption.create(val.id, val.name, val)).toList(),
+                  selectedValue: FormBuilderOption(id: parent.selectedOption1?.id, label: parent.selectedOption1?.name, value: parent.selectedOption1),
+                  options: listChildOptions.map((val) => FormBuilderOption(id: val.id, label: val.name, value: val)).toList(),
                   onChanged: (val) => this.setState(() { parent.selectedOption1 = val.value; })
                 ),
                 FormBuilderRadio(
+                  decoration: InputDecoration(
+                    labelText: "Radio Input"
+                  ),
                   id: "myRadio2",
-                  selectedValue: FormBuilderRadioOption.create(parent.selectedOption2?.id, parent.selectedOption2?.name, parent.selectedOption2),
-                  options: listChildOptions.map((val) => FormBuilderRadioOption.create(val.id, val.name, val)).toList(),
+                  selectedValue: FormBuilderOption(id: parent.selectedOption2?.id, label: parent.selectedOption2?.name, value: parent.selectedOption2),
+                  options: listChildOptions.map((val) => FormBuilderOption(id: val.id, label: val.name, value: val)).toList(),
                   onChanged: (val) => this.setState(() { parent.selectedOption2 = val.value; })
                 ),
+                FormBuilderDropdown(
+                  decoration: InputDecoration(
+                    labelText: "Combo Input"
+                  ),
+                  id: "myCombo",
+                  selectedValue: FormBuilderOption(id: parent.selectedOption3?.id, label: parent.selectedOption3?.name, value: parent.selectedOption3),
+                  options: listChildOptions.map((val) => FormBuilderOption(id: val.id, label: val.name, value: val)).toList(),
+                  onChanged: (val) => this.setState(() { parent.selectedOption3 = val.value; })
+                ),
+                
                 // CHILD
                 ..._buildDetails(context)
               ],
@@ -184,6 +212,9 @@ class _MainPageState extends State<MainPage> {
             if (_formState.currentState.validate()) {
               _formState.currentState.save();
               print(_formState.currentState.value);
+              this.setState(() {
+                jsonValue = _formState.currentState.toJson();
+              });
             }
           },
         )

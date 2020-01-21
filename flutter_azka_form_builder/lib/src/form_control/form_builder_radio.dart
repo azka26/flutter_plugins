@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_azka_form_builder/src/azka_form_builder.dart';
-import 'package:flutter_azka_form_builder/src/form_control/form_builder_radio_option.dart';
+import 'package:flutter_azka_form_builder/src/form_control/form_builder_option.dart';
 
 
 
@@ -8,9 +8,9 @@ class FormBuilderRadio extends StatefulWidget {
   final String id;
   final bool readOnly;
   final InputDecoration decoration;
-  final List<FormBuilderRadioOption> options;
-  final FormBuilderRadioOption selectedValue;
-  final ValueChanged<FormBuilderRadioOption> onChanged;
+  final List<FormBuilderOption> options;
+  final FormBuilderOption selectedValue;
+  final ValueChanged<FormBuilderOption> onChanged;
   FormBuilderRadio({ 
     Key key
     , @required this.id
@@ -53,20 +53,20 @@ class _FormBuilderRadioState extends State<FormBuilderRadio> {
       key: _formFieldState,
       enabled: !(widget.readOnly??false),
       initialValue: widget.selectedValue,
-      builder: (FormFieldState<FormBuilderRadioOption> field) {
+      builder: (FormFieldState<FormBuilderOption> field) {
         List<Widget> radioList = new List<Widget>();
         widget.options.forEach((el) {
-          FormBuilderRadioOption selected;
+          FormBuilderOption selected;
           if (field.value != null && field.value.id == el.id) {
             selected = el;
           }
-
+          
           radioList.add(
             ListTile(
               dense: true,
               isThreeLine: false,
               contentPadding: EdgeInsets.all(0),
-              title: Text(el.label),
+              title: el,
               trailing: Radio(
                 value: el,
                 groupValue: selected,
@@ -89,7 +89,8 @@ class _FormBuilderRadioState extends State<FormBuilderRadio> {
         return InputDecorator(
           decoration: widget.decoration.copyWith(
             enabled: !(widget.readOnly??false),
-            errorText: field.errorText
+            errorText: field.errorText,
+            border: InputBorder.none
           ),
           child: Column(
             children: radioList,

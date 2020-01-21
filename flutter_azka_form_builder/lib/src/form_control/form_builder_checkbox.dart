@@ -75,7 +75,8 @@ class _FormBuilderCheckboxState extends State<FormBuilderCheckbox> {
         return InputDecorator(
           decoration: widget.decoration.copyWith(
             enabled: !widget.readOnly,
-            errorText: field.errorText
+            errorText: field.errorText,
+            border: InputBorder.none
           ),
           child: ListTile(
             dense: true,

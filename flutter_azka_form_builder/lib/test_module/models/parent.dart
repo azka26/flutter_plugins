@@ -5,13 +5,22 @@ class Parent {
   String _id;
   String _name;
   bool _isActive;
+  DateTime _dateValue;
   ChildOption _selectedOption1;
   ChildOption _selectedOption2;
+  ChildOption _selectedOption3;
+
+  DateTime get dateValue => this._dateValue;
+  set dateValue(DateTime value) => this._dateValue = value; 
 
   ChildOption get selectedOption1 => this._selectedOption1;
-  ChildOption get selectedOption2 => this._selectedOption2;
   set selectedOption1(ChildOption val) => this._selectedOption1 = val;
+  
+  ChildOption get selectedOption2 => this._selectedOption2;
   set selectedOption2(ChildOption val) => this._selectedOption2 = val;
+
+  ChildOption get selectedOption3 => this._selectedOption3;
+  set selectedOption3(ChildOption val) => this._selectedOption3 = val;
 
   List<Child> _children;
 

@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_azka_form_builder/src/form_control/form_builder_radio_option.dart';
-import 'dart:async';
+import 'dart:convert';
 
-import 'form_control/form_builder_radio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_azka_form_builder/src/form_control/form_builder_option.dart';
+import 'dart:async';
+import 'package:intl/intl.dart';
 
 typedef OnChanged = void Function();
 typedef OnWillPop = Future<bool> Function();
@@ -47,6 +48,10 @@ class AzkaFormBuilderState extends State<AzkaFormBuilder> {
   Map<String, dynamic> _value = new Map<String, dynamic>();
   Map<String, dynamic> get value => this._value;
 
+  String toJson() {
+    return jsonEncode(this._value);
+  }
+
   void save() 
   {
     this._formState.currentState.save();
@@ -54,10 +59,14 @@ class AzkaFormBuilderState extends State<AzkaFormBuilder> {
   }
 
   void _setValue(Map<String, dynamic> map, String key, dynamic value) {
-    if (value is FormBuilderRadioOption) 
+    if (value is FormBuilderOption) 
     {
       map.putIfAbsent(key, () => value.toFormValue());
     } 
+    else if (value is DateTime) {
+      DateFormat formatter = DateFormat("yyyy-MM-dd HH:mm:ss");
+      map.putIfAbsent(key, () => formatter.format(value));
+    }
     else 
     {
       map.putIfAbsent(key, () => value);
