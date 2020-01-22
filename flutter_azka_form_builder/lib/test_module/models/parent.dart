@@ -2,53 +2,61 @@ import 'package:flutter_azka_form_builder/test_module/models/child.dart';
 import 'package:flutter_azka_form_builder/test_module/models/child_option.dart';
 
 class Parent {
-  String _id;
-  String _name;
-  bool _isActive;
-  DateTime _dateValue;
-  ChildOption _selectedOption1;
-  ChildOption _selectedOption2;
-  ChildOption _selectedOption3;
-
-  DateTime get dateValue => this._dateValue;
-  set dateValue(DateTime value) => this._dateValue = value; 
-
-  ChildOption get selectedOption1 => this._selectedOption1;
-  set selectedOption1(ChildOption val) => this._selectedOption1 = val;
-  
-  ChildOption get selectedOption2 => this._selectedOption2;
-  set selectedOption2(ChildOption val) => this._selectedOption2 = val;
-
-  ChildOption get selectedOption3 => this._selectedOption3;
-  set selectedOption3(ChildOption val) => this._selectedOption3 = val;
-
+  String _inputText;
+  String _inputMultiline;
+  DateTime _inputDate;
+  DateTime _inputDateTime;
+  DateTime _inputTime;
+  bool _inputCheckbox;
+  ChildOption _inputRadio;
   List<Child> _children;
 
-  String get id => this._id;
-  set id(String val) => this._id = val;
+  set inputText(String val) => this._inputText = val;
+  String get inputText => this._inputText;
 
-  String get name => this._name;
-  set name(String val) => this._name = val;
+  set inputMultiline(String val) => this._inputMultiline = val;
+  String get inputMultiline => this._inputMultiline;
 
-  bool get isActive => this._isActive;
-  set isActive(bool val) => this._isActive = val;
+  set inputDate(DateTime val) => this._inputDate = val;
+  DateTime get inputDate => this._inputDate;
 
-  List<Child> get children {
-    if (_children == null) _children = new List<Child>();
-    return _children;
-  }
+  set inputDateTime(DateTime val) => this._inputDateTime = val;
+  DateTime get inputDateTime => this._inputDateTime;
+
+  set inputTime(DateTime val) => this._inputTime = val;
+  DateTime get inputTime => this._inputTime;
+
+  set inputCheckbox(bool val) => this._inputCheckbox = val;
+  bool get inputCheckbox => this._inputCheckbox;
+
+  set inputRadio(ChildOption val) => this._inputRadio = val;
+  ChildOption get inputRadio => this._inputRadio;
+
   set children(List<Child> val) => this._children = val;
+  List<Child> get children {
+    if (this._children == null) _children = new List<Child>();
+    return this._children;
+  }
 
   Parent.create(Map<String, dynamic> map) {
     if (map == null) return;
-    this.id = map["id"];
-    this.name = map["name"];
-    this.isActive = map["isActive"];
-    if (map["children"] != null) {
-      List<Map<String, dynamic>> list = map["children"] as List<Map<String, dynamic>>;
-      for (int i = 0; i < list.length; i++) {
-        Child child = Child.create(list[i]);
-        children.add(child);
+    this.inputText = map["inputText"];
+    this.inputMultiline = map["inputMultiline"];
+    this.inputDate = map["inputDate"];
+    this.inputDateTime = map["inputDateTime"];
+    this.inputTime = map["inputTime"];
+    this.inputCheckbox = map["inputCheckbox"];
+    if (map.containsKey("inputRadio") && map["inputRadio"] is Map<String, dynamic>) 
+    {
+      this.inputRadio = ChildOption.create(map["inputRadio"]);
+    }
+    
+    if (map.containsKey("children") && map["children"] is List) {
+      List list = map["children"] as List;
+      if (list.length > 0) {
+        for (int i = 0; i < list.length; i++) {
+          this.children.add(Child.create(list[i]));
+        }
       }
     }
   }

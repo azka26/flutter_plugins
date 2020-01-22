@@ -1,22 +1,45 @@
 import 'package:flutter_azka_form_builder/test_module/models/child_option.dart';
 
 class Child {
-  String _id;
-  String _name;
-  ChildOption _option;
+  String _inputText;
+  String _inputMultiline;
+  DateTime _inputDate;
+  DateTime _inputDateTime;
+  DateTime _inputTime;
+  ChildOption _inputRadio;
+  bool _inputCheckbox;
 
-  ChildOption get option => this._option;
-  set option(ChildOption val) => this._option = val;
+  set inputText(String val) => this._inputText = val;
+  String get inputText => this._inputText;
 
-  String get id => this._id;
-  set id(String val) => this._id = val;
+  set inputMultiline(String val) => this._inputMultiline = val;
+  String get inputMultiline => this._inputMultiline;
 
-  String get name => this._name;
-  set name(String val) => this._name = val;
+  set inputDate(DateTime val) => this._inputDate = val;
+  DateTime get inputDate => this._inputDate;
+
+  set inputDateTime(DateTime val) => this._inputDateTime = val;
+  DateTime get inputDateTime => this._inputDateTime;
+
+  set inputTime(DateTime val) => this._inputTime = val;
+  DateTime get inputTime => this._inputTime;
+
+  set inputCheckbox(bool val) => this._inputCheckbox = val;
+  bool get inputCheckbox => this._inputCheckbox;
+
+  set inputRadio(ChildOption val) => this._inputRadio = val;
+  ChildOption get inputRadio => this._inputRadio;
 
   Child.create(Map<String, dynamic> map) {
-    if (map == null) return;
-    this.id = map["id"];
-    this.name = map["name"];
+    this.inputText = map["inputText"];
+    this.inputMultiline = map["inputMultiline"];
+    this.inputDate = map["inputDate"];
+    this.inputDateTime = map["inputDateTime"];
+    this.inputTime = map["inputTime"];
+    this.inputCheckbox = map["inputCheckbox"];
+    if (map.containsKey("inputRadio") && map["inputRadio"] is Map<String, dynamic>) 
+    {
+      this.inputRadio = ChildOption.create(map["inputRadio"]);
+    }
   }
 }
