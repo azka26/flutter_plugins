@@ -49,18 +49,23 @@ class _FormBuilderRadioState extends State<FormBuilderRadio> {
 
   @override
   Widget build(BuildContext context) {
+    FormBuilderOption selectedOptions;
+    if (widget.selectedValue != null) {
+      for (int i = 0; i < widget.options.length; i++) {
+        FormBuilderOption item = widget.options[i];
+        if (item.id == widget.selectedValue.id) {
+          selectedOptions = item; 
+        }
+      }
+    }
+
     return FormField(
       key: _formFieldState,
       enabled: !(widget.readOnly??false),
-      initialValue: widget.selectedValue,
+      initialValue: selectedOptions,
       builder: (FormFieldState<FormBuilderOption> field) {
         List<Widget> radioList = new List<Widget>();
         widget.options.forEach((el) {
-          FormBuilderOption selected;
-          if (field.value != null && field.value.id == el.id) {
-            selected = el;
-          }
-          
           radioList.add(
             ListTile(
               dense: true,
@@ -69,7 +74,7 @@ class _FormBuilderRadioState extends State<FormBuilderRadio> {
               title: el,
               trailing: Radio(
                 value: el,
-                groupValue: selected,
+                groupValue: selectedOptions,
                 onChanged: (value) {
                   FocusScope.of(context).requestFocus(FocusNode());
                   field.didChange(value);
