@@ -7,7 +7,7 @@ enum InputType { date, datetime, time }
 class FormBuilderDateTimePicker extends StatefulWidget {
   final String id;
   final InputDecoration decoration;
-  final DateFormat dateFormat;
+  final String dateFormat;
   final DateTime value;
   final DateTime firstDate;
   final DateTime lastDate;
@@ -36,10 +36,13 @@ class FormBuilderDateTimePicker extends StatefulWidget {
 class _FormBuilderDateTimePickerState extends State<FormBuilderDateTimePicker> {
   GlobalKey<FormFieldState> _formFieldState = GlobalKey<FormFieldState>();
   AzkaFormBuilderState _formState;
+  TextEditingController _controller;
+
   @override
   void initState() {
     _formState = AzkaFormBuilder.of(context);
-    if (_formState != null) {
+    if (_formState != null) 
+    {
       _formState.addField(widget.id, _formFieldState);
     }
     super.initState();
@@ -54,121 +57,115 @@ class _FormBuilderDateTimePickerState extends State<FormBuilderDateTimePicker> {
     super.dispose();
   }
 
-  void _showDatePicker(BuildContext context, FormFieldState<DateTime> field) 
-  {
+  void _setValueChanged(DateTime value) {
+    String  valString = ""; 
+    if (value != null) {
+      valString = _dateTimeToString(value);
+    } 
+    _controller.value = TextEditingValue(text: valString);
+    if (widget.onChanged != null) {
+      widget.onChanged(value);
+    }
+  }
+
+  void _showDatePicker(BuildContext context) {
     DateTime now = DateTime.now();
-    DateTime firstDate = widget.firstDate??DateTime(1900);
-    DateTime lastDate = widget.lastDate??DateTime(2100);
-    
     Future<DateTime> datePicker = showDatePicker(
-      context: context, 
-      firstDate: firstDate,
-      lastDate: lastDate,
-      initialDate: field.value??DateTime(now.year, now.month, now.day),
+      initialDate: widget.value??DateTime(now.year, now.month, now.day),
+      firstDate: widget.firstDate??DateTime(1970),
+      lastDate: widget.lastDate??DateTime(2100),
+      context: context
     );
-    datePicker.then((value) {
-      field.didChange(value);
-      if (widget.onChanged != null) 
-      {
-        widget.onChanged(value);
-      }
+    datePicker.then((dateValue) {
+      _setValueChanged(dateValue);
     });
   }
 
-  void _showTimePicker(BuildContext context, FormFieldState<DateTime> field, DateTime date) 
-  {
-    Future<TimeOfDay> datePicker = showTimePicker(
-      context: context, 
-      initialTime: TimeOfDay.fromDateTime(field.value??DateTime.now()),
+  void _showTimePicker(BuildContext context, DateTime selectedDate) {
+    DateTime now = DateTime.now();
+    DateTime selectedTime = widget.value??now;
+    Future<TimeOfDay> timePicker = showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(selectedTime),
     );
-    datePicker.then((value) {
-      date = date??DateTime.now();
-      DateTime time = new DateTime(date.year, date.month, date.day, value.hour, value.minute);
-      field.didChange(time);
-      if (widget.onChanged != null) 
-      {
-        widget.onChanged(time);
+    timePicker.then((timeOfDay) {
+      if (timeOfDay == null) {
+        _setValueChanged(null);
+        return;
       }
+
+      DateTime dateTimeResult = selectedDate??now;
+      DateTime result = DateTime(dateTimeResult.year, dateTimeResult.month, dateTimeResult.day, timeOfDay.hour, timeOfDay.minute);
+      _setValueChanged(result);
     });
   }
 
-  void _showDateTimePicker(BuildContext context, FormFieldState<DateTime> field) 
-  {
+  void _showDateTimePicker(BuildContext context) {
     DateTime now = DateTime.now();
-    DateTime firstDate = widget.firstDate??DateTime(1900);
-    DateTime lastDate = widget.lastDate??DateTime(2100);
-    
     Future<DateTime> datePicker = showDatePicker(
-      context: context, 
-      firstDate: firstDate,
-      lastDate: lastDate,
-      initialDate: field.value??DateTime(now.year, now.month, now.day),
+      initialDate: widget.value??DateTime(now.year, now.month, now.day, now.hour, now.minute),
+      firstDate: widget.firstDate??DateTime(1970),
+      lastDate: widget.lastDate??DateTime(2100),
+      context: context,
     );
-    datePicker.then((value) {
-      if (value == null) {
-        field.didChange(value);
-        if (widget.onChanged != null) 
-        {
-          widget.onChanged(value);
-        }
+    datePicker.then((dateValue) {
+      if (dateValue == null) {
+        _setValueChanged(null);
+        return;
       }
-      else {
-        _showTimePicker(context, field, value);
-      }
+      _showTimePicker(context, dateValue);
     });
+  }
+  
+  DateFormat _getDateTimeFormatter() {
+    String formatDate = widget.dateFormat;
+    if (formatDate == null) {
+      switch (widget.inputType) {
+        case InputType.date: formatDate = "yyyy-MM-dd"; break;
+        case InputType.datetime: formatDate = "yyyy-MM-dd HH:mm:ss"; break;
+        case InputType.time: formatDate = "HH:mm:ss"; break;
+      }
+    }
+    return DateFormat(formatDate);
+  }
+
+  String _dateTimeToString(DateTime value) {
+    if (value == null) return "";
+    return _getDateTimeFormatter().format(value);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FormField(
-      initialValue: widget.value,
-      key: _formFieldState,
-      builder: (FormFieldState<DateTime> field) {
-        String formatDisplay = "";
-        if (field.value != null) 
-        {
-          DateFormat formatter = widget.dateFormat;
-          if (formatter == null) {
-            if (widget.inputType == InputType.date) {
-              formatter = new DateFormat("yyyy-MM-dd");
-            }
-            else if (widget.inputType == InputType.time) {
-              formatter = new DateFormat("HH:mm");
-            }
-            else if (widget.inputType == InputType.datetime) {
-              formatter = new DateFormat("yyyy-MM-dd HH:mm");
-            }
-          }
-          formatDisplay = formatter.format(field.value);
-        }
+    String selectedDate = _dateTimeToString(widget.value);
+    _controller = new TextEditingController();
+    _controller.value = TextEditingValue(text: selectedDate);
 
-        return GestureDetector(
-          child: InputDecorator(
-            decoration: widget.decoration.copyWith(
-              errorText: field.errorText,
-              enabled: !(widget.readOnly??false)
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(formatDisplay),
-                Icon(Icons.calendar_today)
-              ],
-            ),
-          ),
-          onTap: widget.readOnly ? null : () {
-            if (widget.inputType == InputType.date) {
-              _showDatePicker(context, field);
-            }
-            else if (widget.inputType == InputType.datetime) {
-              _showDateTimePicker(context, field);
-            }
-            else if (widget.inputType == InputType.time) {
-              _showTimePicker(context, field, DateTime.now());
-            }
-          }
-        );
+    Widget icon;
+    if (widget.decoration.suffixIcon != null) {
+      icon = widget.decoration.suffixIcon;
+    } else {
+      switch (widget.inputType) {
+        case InputType.date: icon = Icon(Icons.calendar_today); break;
+        case InputType.datetime: icon = Icon(Icons.calendar_today); break;
+        case InputType.time: icon = Icon(Icons.timer);break;
+      }
+    }
+
+    return TextFormField(
+      key: _formFieldState,
+      controller: _controller,
+      decoration: widget.decoration.copyWith(
+        suffixIcon: icon
+      ),
+      onTap: () {
+        switch (widget.inputType) 
+        {
+          case InputType.date: _showDatePicker(context); break;
+          case InputType.datetime: _showDateTimePicker(context); break;
+          case InputType.time: _showTimePicker(context, null);break;
+        }
       },
+      readOnly: true
     );
   }
 }

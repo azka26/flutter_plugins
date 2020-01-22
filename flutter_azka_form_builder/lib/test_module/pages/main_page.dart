@@ -78,9 +78,9 @@ class _MainPageState extends State<MainPage> {
               new FormBuilderTextField(
                 id: "details[${i.toString()}].id",
                 decoration: InputDecoration(labelText: "Detail Id [${i.toString()}]"),
-                validators: [
-                  FormInputValidator.required(errorText: "Detail Id ${i.toString()} is required.")
-                ],
+                // validators: [
+                //   FormInputValidator.required(errorText: "Detail Id ${i.toString()} is required.")
+                // ],
                 value: parent.children[i].id,
                 onChanged: (val) => this.setState(() { parent.children[i].id = val; }),
               ),
@@ -129,7 +129,7 @@ class _MainPageState extends State<MainPage> {
                 FormBuilderDateTimePicker(
                   id: "my_date",
                   decoration: InputDecoration(
-                    labelText: "TEST"
+                    labelText: "Date Time Picker",
                   ),
                   inputType: InputType.datetime,
                   value: parent.dateValue,
