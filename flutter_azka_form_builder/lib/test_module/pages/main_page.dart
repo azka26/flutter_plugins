@@ -89,7 +89,6 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             )
-            
           ),
           DataCell(
             FormBuilderTextField(
@@ -106,21 +105,29 @@ class _MainPageState extends State<MainPage> {
       listTableRow.add(row);
     }
     
+    double minWidth = 800;
+    double width = MediaQuery.of(context).size.width;
+    if (width < minWidth) {
+      width = minWidth;
+    }
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      // padding: EdgeInsets.all(10),
-      child: DataTable(
-            columns: <DataColumn>[
-              DataColumn(
-                label: Text("Input Text")
-              ),
-              DataColumn(
-                label: Text("Input Date")
-              )
-            ],
-            rows: listTableRow,
-          )
+      child: SizedBox(
+        width: width,
+        child: DataTable(
+          headingRowHeight: 50,
+          columns: <DataColumn>[
+            DataColumn(
+              label: Text("Input Text")
+            ),
+            DataColumn(
+              label: Text("Input Date")
+            )
+          ],
+          rows: listTableRow,
+        ),
+      )
     );
   }
 

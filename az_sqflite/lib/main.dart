@@ -1,6 +1,5 @@
+import 'package:az_sqflite/testing/test_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_azka_form_builder/test_module/pages/form_page.dart';
-import 'package:flutter_azka_form_builder/test_module/pages/main_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,7 +21,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: FormPage() // MainPage(),
+      home: TestPage(),
     );
   }
 }
