@@ -1,0 +1,4 @@
+enum FilterComposition {
+  And,
+  Or
+}

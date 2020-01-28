@@ -2,6 +2,7 @@ import 'package:az_sqflite/src/field_map.dart';
 import 'package:az_sqflite/src/field_type.dart';
 import 'package:az_sqflite/src/model_base.dart';
 import 'package:az_sqflite/src/table_map.dart';
+import 'package:az_sqflite/testing/regional_context.dart';
 
 import 'city.dart';
 
@@ -12,12 +13,18 @@ class Province extends ModelBase {
   String get id => this._id;
   String get name => this._name;
 
+  set id(String val) => this._id = val;
+  set name(String val) => this._name = val;
+
   List<City> _listOfCities;
   List<City> get listOfCities => this._listOfCities;
   set listOfCities(List<City> val) => this._listOfCities = val;
 
-  set id(String val) => this._id = val;
-  set name(String val) => this._name = val;
+  Future<List<City>> get loadCities async {
+    RegionalContext regionalContext = new RegionalContext();
+    this.listOfCities = await regionalContext.cities.select().toList();
+    return this.listOfCities;
+  }
 
   @override
   ModelBase defaultInstance() {
@@ -27,8 +34,8 @@ class Province extends ModelBase {
   @override
   ModelBase rowToObj(Map<String, dynamic> map) {
     Province province = new Province();
-    province.id = map["field_id"];
-    province.name = map["field_name"];
+    province.id = getValueField("field_id", map);
+    province.name = getValueField("field_name", map);
     return province;
   }
 

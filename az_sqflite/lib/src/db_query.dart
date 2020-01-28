@@ -20,7 +20,9 @@ class DbQuery<T extends ModelBase> {
     if (transaction == null) {
       Database db = await this.dbContext.getDbInstance();
       list = await db.query(table.tableName);
-    } else {
+    } 
+    else 
+    {
       list = await transaction.query(table.tableName);
     }
     

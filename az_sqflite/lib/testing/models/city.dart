@@ -38,10 +38,13 @@ class City extends ModelBase {
   @override
   ModelBase rowToObj(Map<String, dynamic> map) {
     City city = new City();
-    city.id = map["field_id"];
-    city.name = map["field_name"];
-    city.province = new Province();
-    city.province.id = map["field_province_id"];
+    city.id = getValueField("field_id", map);
+    city.name = getValueField("field_name", map);
+    String valueProvinceId = getValueField("field_province_id", map);
+    if (valueProvinceId != null) {
+      city.province = new Province();
+      city.province.id = valueProvinceId;
+    }
     return city;
   }
 
