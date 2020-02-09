@@ -44,13 +44,13 @@ class TreeFilter {
       if (composition == FilterComposition.And) {
         SQLFilter leftSQL = this.left.toSQL();
         SQLFilter rightSQL = this.right.toSQL();
-        sqlFilter.sql = "((${leftSQL.sql}) AND (${leftSQL.sql}))";
+        sqlFilter.sql = "((${leftSQL.sql}) AND (${rightSQL.sql}))";
         sqlFilter.parameters.addAll(leftSQL.parameters);
         sqlFilter.parameters.addAll(rightSQL.parameters);
       } else if (composition == FilterComposition.Or) {
         SQLFilter leftSQL = this.left.toSQL();
         SQLFilter rightSQL = this.right.toSQL();
-        sqlFilter.sql = "((${leftSQL.sql}) OR (${leftSQL.sql}))";
+        sqlFilter.sql = "((${leftSQL.sql}) OR (${rightSQL.sql}))";
         sqlFilter.parameters.addAll(leftSQL.parameters);
         sqlFilter.parameters.addAll(rightSQL.parameters);
       }

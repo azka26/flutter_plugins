@@ -23,7 +23,7 @@ class TableMapper {
   Map<String, dynamic> toFieldValue() {
     Map<String, dynamic> mapValue = new Map<String, dynamic>();
     for (int i = 0; i < fields.length; i++) {
-      mapValue.putIfAbsent(fields[i].fieldName, fields[i].dbValue);
+      mapValue.putIfAbsent(fields[i].fieldName, () => fields[i].dbValue);
     }
     return mapValue;
   }

@@ -10,11 +10,11 @@ abstract class DbContext {
   Database _db;
   Transaction _transaction;
 
-  FutureOr<void> onConfigure(Database db) {}
-  FutureOr<void> onCreate(Database db, int version) {}
-  FutureOr<void> onDowngrade(Database db, int oldVersion, int newVersion) {}
-  FutureOr<void> onOpen(Database db) {}
-  FutureOr<void> onUpgrade(Database db, int oldVersion, int newVersion) {}
+  FutureOr<void> onConfigure(Database db);
+  FutureOr<void> onCreate(Database db, int version);
+  FutureOr<void> onDowngrade(Database db, int oldVersion, int newVersion);
+  FutureOr<void> onOpen(Database db);
+  FutureOr<void> onUpgrade(Database db, int oldVersion, int newVersion);
   
   Future<Database> get database async 
   {
@@ -50,6 +50,7 @@ abstract class DbContext {
       if (!scopeResult) {
         throw("Transaction Rollback.");
       }
+      return scopeResult;
     }).then((result) {
       this._transaction = null;
       return result;

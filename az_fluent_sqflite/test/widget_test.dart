@@ -4,9 +4,6 @@
 // utility that Flutter provides. For example, you can send tap and scroll
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:az_fluent_sqflite/test/models/province.dart';
-import 'package:az_fluent_sqflite/test/region_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:az_fluent_sqflite/src/az_fluent_sqflite.dart';
@@ -31,7 +28,6 @@ void main() {
   });
   
   testWidgets('test sqlite', (WidgetTester tester) async {
-    RegionContext regionContext = new RegionContext();
-    List<Province> listOfProvince = await regionContext.provinces.select().toList();
+    
   });
 }
