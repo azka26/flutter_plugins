@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_az_widget/widget/scroll_page_stream.dart';
+import 'package:flutter_az_widget/flutter_az_widget.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ScrollBloc {
